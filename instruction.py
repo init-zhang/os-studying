@@ -1,6 +1,7 @@
 def limit(x, bits):
     return x & (2**bits-1)
 
+# Determine instruction format later
 def instruction(opcode, operand1, operand2):
     instruct = 0
     instruct |= limit(opcode, 4) << 16
@@ -9,9 +10,9 @@ def instruction(opcode, operand1, operand2):
     return instruct
 
 def print_instruction(instruct):
-    print(instruct >> 16 & 0b1111)
-    print(instruct >> 8 & 0b11111111)
-    print(instruct & 0b11111111)
+    print(instruct >> 16 & 0xF)
+    print(instruct >> 8 & 0xFF)
+    print(instruct & 0xFF)
 
 instruct = instruction(1,3,5)
 print(bin(instruct))
