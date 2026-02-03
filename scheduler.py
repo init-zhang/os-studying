@@ -17,15 +17,7 @@ C_ACC = 4
 C_R0 = 5
 C_R1 = 6
 C_R2 = 7
-C_R3 = 8
-C_R4 = 9
-C_R5 = 10
-C_R6 = 11
-C_R7 = 12
-C_R8 = 13
-C_R9 = 14
-C_R10 = 15
-cpu = [0] * 16
+cpu = [0] * 8
 
 def add_process(memory, context, data, code):
     # Write process index to process index list
