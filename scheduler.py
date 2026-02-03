@@ -19,6 +19,18 @@ C_R1 = 6
 C_R2 = 7
 cpu = [0] * 8
 
+# Processes
+# Process control block (8 words)
+PCB_PC = 0
+PCB_ACC = 1
+PCB_R0 = 2
+PCB_R1 = 3
+PCB_R2 = 4
+# 8 words of data
+PD_LENGTH = 8
+# 16 words of code
+PC_LENGTH = 16
+
 def add_process(memory, context, data, code):
     # Write process index to process index list
     # Write context, data, and code, with respects to their sizes
