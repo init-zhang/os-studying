@@ -54,3 +54,12 @@ def save_process(reg, mem, pid):
     mem[process_base + PCB_R0] = reg[C_R0]
     mem[process_base + PCB_R1] = reg[C_R1]
     mem[process_base + PCB_R2] = reg[C_R2]
+
+def load_process(reg, mem, pid):
+    process_base = mem[M_PROCESS_LIST+pid]
+    reg[C_PC] = mem[process_base + PCB_PC]
+    reg[C_ACC] = mem[process_base + PCB_ACC]
+    reg[C_R0] = mem[process_base + PCB_R0]
+    reg[C_R1] = mem[process_base + PCB_R1]
+    reg[C_R2] = mem[process_base + PCB_R2]
+
