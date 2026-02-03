@@ -1,11 +1,13 @@
 # Memory
-# 0-23 OS and scheduler
+# 0-22 OS and scheduler
+# 23 Current PID
 # 24 Queue tail
 # 25 Queue head
 # 26-31 Process queue
 # 32 Next free PID
 # 33-63 Process list
 # 64-1023 Processes
+M_CURRENT_PID = 23
 M_QUEUE_TAIL = 24
 M_QUEUE_HEAD = 25
 M_QUEUE_BASE = 26
@@ -57,44 +59,41 @@ def start_process(reg, mem, asm):
     # Load asm into binary, then into asm
     for i, instruction in enumerate(assemble(asm)):
         mem[process_base + PC_BASE + i] = instruction
-    enqueue(reg, mem, pid)
+    mem[M_CURRENT_PID] = pid
+    enqueue(reg, mem)
 
 # Placeholder
 def assemble(asm):
     for line in asm:
         yield line
 
-# Method should not require pid parameter
-# Should be known in memory
-def save_process(reg, mem, pid):
-    process_base = mem[M_PROCESS_LIST+pid]
+def save_process(reg, mem):
+    process_base = mem[M_PROCESS_LIST+mem[M_CURRENT_PID]]
     mem[process_base + PCB_PC] = reg[C_PC]
     mem[process_base + PCB_ACC] = reg[C_ACC]
     mem[process_base + PCB_R0] = reg[C_R0]
     mem[process_base + PCB_R1] = reg[C_R1]
     mem[process_base + PCB_R2] = reg[C_R2]
 
-def load_process(reg, mem, pid):
-    process_base = mem[M_PROCESS_LIST+pid]
+def load_process(reg, mem):
+    process_base = mem[M_PROCESS_LIST+mem[M_CURRENT_PID]]
     reg[C_PC] = mem[process_base + PCB_PC]
     reg[C_ACC] = mem[process_base + PCB_ACC]
     reg[C_R0] = mem[process_base + PCB_R0]
     reg[C_R1] = mem[process_base + PCB_R1]
     reg[C_R2] = mem[process_base + PCB_R2]
 
-# Omit pid parameter in the future
-def enqueue(reg, mem, pid):
-    mem[mem[M_QUEUE_TAIL]] = pid
+def enqueue(reg, mem):
+    mem[mem[M_QUEUE_TAIL]] = mem[M_CURRENT_PID]
     mem[M_QUEUE_TAIL] += 1
     if mem[M_QUEUE_TAIL] > M_QUEUE_END:
         mem[M_QUEUE_TAIL] = M_QUEUE_BASE
 
 def dequeue(reg, mem):
-    pid = mem[M_QUEUE_HEAD]
+    mem[M_CURRENT_PID] = mem[mem[M_QUEUE_HEAD]]
     mem[M_QUEUE_HEAD] += 1
     if mem[M_QUEUE_HEAD] > M_QUEUE_END:
         mem[M_QUEUE_HEAD] = M_QUEUE_BASE
-    return pid
 
 # No local variables for the fun and realism
 def cpu_cycle(reg, mem):
@@ -120,4 +119,5 @@ start_process(registers, memory, range(4))
 start_process(registers, memory, range(8))
 start_process(registers, memory, range(12))
 start_process(registers, memory, range(16))
+dequeue(registers, memory)
 hexdump(memory)
