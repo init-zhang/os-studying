@@ -75,3 +75,9 @@ def cpu_cycle(reg, mem):
     # Scheduler calls
     # Check queue
     # Save/load if needed
+
+def hexdump(src):
+    for i in range(0, len(src), 8):
+        print(f"{i}-{i+7}:", " ".join(hex(src[i])[2:].zfill(4) for i in range(i, i+8)))
+
+hexdump([i for i in range(0, 32)])
