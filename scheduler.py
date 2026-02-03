@@ -47,6 +47,7 @@ def start_process(reg, mem, asm):
     mem[M_PROCESS_LIST] += 1
     process_base = mem[M_PROCESSES+pid]
     mem[process_base + PCB_PID] = pid
+    mem[PCB_PC] = process_base + PC_BASE
     # Load asm into binary, then into asm
 
 def save_process(reg, mem, pid):
