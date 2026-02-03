@@ -13,7 +13,8 @@ M_QUEUE_END = 31
 M_PROCESS_LIST = 32
 M_PROCESSES = 64
 def init_memory():
-    memory = [0] * 256
+    memory = [0xFFFF] * 256
+    memory[M_PROCESS_LIST] = 0
     memory[M_QUEUE_TAIL] = M_QUEUE_BASE
     memory[M_QUEUE_HEAD] = M_QUEUE_BASE
     return memory
@@ -30,6 +31,7 @@ C_R2 = 7
 registers = [0] * 8
 
 # Processes
+P_SIZE = 32
 # 0-7 Process control block
 PCB_PID = 0
 PCB_PC = 1
@@ -48,7 +50,7 @@ def start_process(reg, mem, asm):
     pid = mem[M_PROCESS_LIST]+1
     # Validate process limit and check for gaps
     mem[M_PROCESS_LIST] += 1
-    process_base = M_PROCESSES+(pid-1)*32
+    process_base = M_PROCESSES+(pid-1)*P_SIZE
     mem[M_PROCESS_LIST+pid] = process_base
     mem[process_base + PCB_PID] = pid
     mem[process_base + PCB_PC] = process_base + PC_BASE
@@ -84,7 +86,7 @@ def dequeue(reg, mem):
     pid = mem[M_QUEUE_HEAD]
     mem[M_QUEUE_HEAD] += 1
     if mem[M_QUEUE_HEAD] > M_QUEUE_END:
-        meme[M_QUEUE_HEAD] = M_QUEUE_BASE
+        mem[M_QUEUE_HEAD] = M_QUEUE_BASE
     return pid
 
 # No local variables for the fun and realism
@@ -99,7 +101,7 @@ def cpu_cycle(reg, mem):
     # Save/load if needed
 
 def padded_hex(n):
-    return hex(n)[2:].zfill(4) if n else "...."
+    return hex(n)[2:].zfill(4) if n != 0xFFFF else "----"
 
 def hexdump(src):
     for i in range(0, len(src), 8):
