@@ -7,7 +7,14 @@ PROCESS_CODE_SIZE = 32
 
 
 # Memory
+# 0-31 OS and scheduler
+# 32 Number of processes
+# 33-63 Process list
+# 64-1023 Processes
+M_PROCESS_LIST = 32
+M_PROCESSES = 64
 memory = [0] * 1024
+
 # CPU registers
 C_PC = 0
 C_IR = 1
@@ -21,35 +28,21 @@ cpu = [0] * 8
 
 # Processes
 # Process control block (8 words)
-PCB_PC = 0
-PCB_ACC = 1
-PCB_R0 = 2
-PCB_R1 = 3
-PCB_R2 = 4
+PCB_PID = 0
+PCB_PC = 1
+PCB_ACC = 2
+PCB_R0 = 3
+PCB_R1 = 4
+PCB_R2 = 5
 # 8 words of data
 PD_LENGTH = 8
 # 16 words of code
 PC_LENGTH = 16
 
-def add_process(memory, context, data, code):
-    # Write process index to process index list
-    # Write context, data, and code, with respects to their sizes
-    # Update process index (process size) and process list index
-
-    memory[process_list_index] = process_index
-    
-    for i in range(PROCESS_CONTEXT_SIZE):
-        memory[process_index + i] = context[i]
-
-    for i in range(PROCESS_DATA_SIZE):
-        memory[process_index + PROCESS_CONTEXT_SIZE + i] = context[i]
-
-    for i in range(PROCESS_CODE_SIZE):
-        memory[process_index + PROCESS_CONTEXT_SIZE + PROCESS_DATA_SIZE + i] = context[i]
-
-    process_list_index += 1
-    process_index += PROCESS_SIZE
-
-print(memory)
-
-print(memory)
+def save_process(reg, mem, pid):
+    process_base = memory[M_PROCESS_LIST+pid]
+    mem[process_base + PCB_PC] = reg[C_PC]
+    mem[process_base + PCB_ACC] = reg[C_ACC]
+    mem[process_base + PCB_R0] = reg[C_R0]
+    mem[process_base + PCB_R1] = reg[C_R1]
+    mem[process_base + PCB_R2] = reg[C_R2]
