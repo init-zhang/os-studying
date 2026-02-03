@@ -9,6 +9,22 @@ PROCESS_CODE_SIZE = 32
 # Memory
 memory = [0] * 1024
 # CPU registers
+C_PC = 0
+C_IR = 1
+C_MAR = 2
+C_MDR = 3
+C_ACC = 4
+C_R0 = 5
+C_R1 = 6
+C_R2 = 7
+C_R3 = 8
+C_R4 = 9
+C_R5 = 10
+C_R6 = 11
+C_R7 = 12
+C_R8 = 13
+C_R9 = 14
+C_R10 = 15
 cpu = [0] * 16
 
 def add_process(memory, context, data, code):
