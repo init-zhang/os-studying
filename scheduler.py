@@ -77,9 +77,12 @@ def cpu_cycle(reg, mem):
     # Check queue
     # Save/load if needed
 
+def padded_hex(n):
+    return hex(n)[2:].zfill(4) if n else "...."
+
 def hexdump(src):
     for i in range(0, len(src), 8):
-        print(f"{i}-{i+7}:", " ".join(hex(src[i])[2:].zfill(4) for i in range(i, i+8)))
+        print(f"{padded_hex(i)}-{padded_hex(i+7)}:", " ".join(padded_hex(src[i]) for i in range(i, i+8)))
 
 start_process(registers, memory, 0)
 start_process(registers, memory, 0)
