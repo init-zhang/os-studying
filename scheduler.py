@@ -52,6 +52,8 @@ def start_process(reg, mem, asm):
     # Load asm into binary, then into asm
     print(pid, process_base)
 
+# Method should not require pid parameter
+# Should be known in memory
 def save_process(reg, mem, pid):
     process_base = mem[M_PROCESS_LIST+pid]
     mem[process_base + PCB_PC] = reg[C_PC]
@@ -68,11 +70,12 @@ def load_process(reg, mem, pid):
     reg[C_R1] = mem[process_base + PCB_R1]
     reg[C_R2] = mem[process_base + PCB_R2]
 
+# No local variables for the fun and realism
 def cpu_cycle(reg, mem):
-    reg[C_IR] = mem[C_PC]
-    mem[C_PC] += 1
+    reg[C_IR] = reg[C_PC]
+    reg[C_PC] += 1
 
-    decode_execute(reg, mem, reg[C_IR])
+    # decode_execute(reg, mem, reg[C_IR])
 
     # Scheduler calls
     # Check queue
@@ -92,3 +95,7 @@ start_process(registers, memory, 0)
 hexdump(memory)
 load_process(registers, memory, 2)
 hexdump(registers)
+cpu_cycle(registers, memory)
+hexdump(registers)
+save_process(registers, memory, 2)
+hexdump(memory)
