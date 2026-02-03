@@ -27,16 +27,18 @@ C_R2 = 7
 cpu = [0] * 8
 
 # Processes
-# Process control block (8 words)
+# 0-7 Process control block
 PCB_PID = 0
 PCB_PC = 1
 PCB_ACC = 2
 PCB_R0 = 3
 PCB_R1 = 4
 PCB_R2 = 5
-# 8 words of data
+# 8-15 words of data
+PD_BASE = 8
 PD_LENGTH = 8
-# 16 words of code
+# 16-31 words of code
+PC_BASE = 16
 PC_LENGTH = 16
 
 def start_process(reg, mem, asm):
@@ -63,3 +65,12 @@ def load_process(reg, mem, pid):
     reg[C_R1] = mem[process_base + PCB_R1]
     reg[C_R2] = mem[process_base + PCB_R2]
 
+def cpu_cycle(reg, mem):
+    reg[C_IR] = mem[C_PC]
+    mem[C_PC] += 1
+
+    decode_execute(reg, mem, reg[C_IR])
+
+    # Scheduler calls
+    # Check queue
+    # Save/load if needed
