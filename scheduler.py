@@ -46,6 +46,7 @@ def start_process(reg, mem, asm):
     # Validate process limit and check for gaps
     mem[M_PROCESS_LIST] += 1
     process_base = M_PROCESSES+(pid-1)*32
+    mem[M_PROCESS_LIST+pid] = process_base
     mem[process_base + PCB_PID] = pid
     mem[process_base + PCB_PC] = process_base + PC_BASE
     # Load asm into binary, then into asm
@@ -89,3 +90,5 @@ start_process(registers, memory, 0)
 start_process(registers, memory, 0)
 start_process(registers, memory, 0)
 hexdump(memory)
+load_process(registers, memory, 2)
+hexdump(registers)
