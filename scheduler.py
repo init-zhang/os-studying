@@ -55,7 +55,14 @@ def start_process(reg, mem, asm):
     mem[process_base + PCB_PID] = pid
     mem[process_base + PCB_PC] = process_base + PC_BASE
     # Load asm into binary, then into asm
-    print(pid, process_base)
+    for i, instruction in enumerate(assemble(asm)):
+        mem[process_base + PC_BASE + i] = instruction
+    enqueue(reg, mem, pid)
+
+# Placeholder
+def assemble(asm):
+    for line in asm:
+        yield line
 
 # Method should not require pid parameter
 # Should be known in memory
@@ -109,18 +116,8 @@ def hexdump(src):
 
 memory = init_memory()
 
-start_process(registers, memory, 0)
-start_process(registers, memory, 0)
-start_process(registers, memory, 0)
-start_process(registers, memory, 0)
-enqueue(registers, memory, 1)
-enqueue(registers, memory, 1)
-enqueue(registers, memory, 2)
-enqueue(registers, memory, 3)
-enqueue(registers, memory, 1)
-enqueue(registers, memory, 1)
-dequeue(registers, memory)
-dequeue(registers, memory)
-dequeue(registers, memory)
-enqueue(registers, memory, 10)
+start_process(registers, memory, range(4))
+start_process(registers, memory, range(8))
+start_process(registers, memory, range(12))
+start_process(registers, memory, range(16))
 hexdump(memory)
