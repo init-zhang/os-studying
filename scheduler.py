@@ -8,7 +8,7 @@ PROCESS_CODE_SIZE = 32
 
 # Memory
 # 0-31 OS and scheduler
-# 32 Number of processes
+# 32 Next free PID
 # 33-63 Process list
 # 64-1023 Processes
 M_PROCESS_LIST = 32
@@ -39,8 +39,16 @@ PD_LENGTH = 8
 # 16 words of code
 PC_LENGTH = 16
 
+def start_process(reg, mem, asm):
+    pid = mem[M_PROCESS_LIST]
+    # Validate process limit and check for gaps
+    mem[M_PROCESS_LIST] += 1
+    process_base = mem[M_PROCESSES+pid]
+    mem[process_base + PCB_PID] = pid
+    # Load asm into binary, then into asm
+
 def save_process(reg, mem, pid):
-    process_base = memory[M_PROCESS_LIST+pid]
+    process_base = mem[M_PROCESS_LIST+pid]
     mem[process_base + PCB_PC] = reg[C_PC]
     mem[process_base + PCB_ACC] = reg[C_ACC]
     mem[process_base + PCB_R0] = reg[C_R0]
