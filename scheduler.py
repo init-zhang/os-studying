@@ -1,19 +1,22 @@
-PROCESS_LIST_MAX_INDEX = 64
-# Process size = 8,16,32 = 56 spaces
-PROCESS_SIZE = 56
-PROCESS_CONTEXT_SIZE = 8
-PROCESS_DATA_SIZE = 16
-PROCESS_CODE_SIZE = 32
-
-
 # Memory
-# 0-31 OS and scheduler
+# 0-23 OS and scheduler
+# 24 Queue tail
+# 25 Queue head
+# 26-31 Process queue
 # 32 Next free PID
 # 33-63 Process list
 # 64-1023 Processes
+M_QUEUE_TAIL = 24
+M_QUEUE_HEAD = 25
+M_QUEUE_BASE = 26
+M_QUEUE_END = 31
 M_PROCESS_LIST = 32
 M_PROCESSES = 64
-memory = [0] * 256
+def init_memory():
+    memory = [0] * 256
+    memory[M_QUEUE_TAIL] = M_QUEUE_BASE
+    memory[M_QUEUE_HEAD] = M_QUEUE_BASE
+    return memory
 
 # CPU registers
 C_PC = 0
@@ -70,6 +73,20 @@ def load_process(reg, mem, pid):
     reg[C_R1] = mem[process_base + PCB_R1]
     reg[C_R2] = mem[process_base + PCB_R2]
 
+# Omit pid parameter in the future
+def enqueue(reg, mem, pid):
+    mem[mem[M_QUEUE_TAIL]] = pid
+    mem[M_QUEUE_TAIL] += 1
+    if mem[M_QUEUE_TAIL] > M_QUEUE_END:
+        mem[M_QUEUE_TAIL] = M_QUEUE_BASE
+
+def dequeue(reg, mem):
+    pid = mem[M_QUEUE_HEAD]
+    mem[M_QUEUE_HEAD] += 1
+    if mem[M_QUEUE_HEAD] > M_QUEUE_END:
+        meme[M_QUEUE_HEAD] = M_QUEUE_BASE
+    return pid
+
 # No local variables for the fun and realism
 def cpu_cycle(reg, mem):
     reg[C_IR] = reg[C_PC]
@@ -88,14 +105,20 @@ def hexdump(src):
     for i in range(0, len(src), 8):
         print(f"{padded_hex(i)}-{padded_hex(i+7)}:", " ".join(padded_hex(src[i]) for i in range(i, i+8)))
 
+memory = init_memory()
+
 start_process(registers, memory, 0)
 start_process(registers, memory, 0)
 start_process(registers, memory, 0)
 start_process(registers, memory, 0)
-hexdump(memory)
-load_process(registers, memory, 2)
-hexdump(registers)
-cpu_cycle(registers, memory)
-hexdump(registers)
-save_process(registers, memory, 2)
+enqueue(registers, memory, 1)
+enqueue(registers, memory, 1)
+enqueue(registers, memory, 2)
+enqueue(registers, memory, 3)
+enqueue(registers, memory, 1)
+enqueue(registers, memory, 1)
+dequeue(registers, memory)
+dequeue(registers, memory)
+dequeue(registers, memory)
+enqueue(registers, memory, 10)
 hexdump(memory)
