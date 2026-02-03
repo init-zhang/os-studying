@@ -13,7 +13,7 @@ PROCESS_CODE_SIZE = 32
 # 64-1023 Processes
 M_PROCESS_LIST = 32
 M_PROCESSES = 64
-memory = [0] * 1024
+memory = [0] * 256
 
 # CPU registers
 C_PC = 0
@@ -24,7 +24,7 @@ C_ACC = 4
 C_R0 = 5
 C_R1 = 6
 C_R2 = 7
-cpu = [0] * 8
+registers = [0] * 8
 
 # Processes
 # 0-7 Process control block
@@ -42,13 +42,14 @@ PC_BASE = 16
 PC_LENGTH = 16
 
 def start_process(reg, mem, asm):
-    pid = mem[M_PROCESS_LIST]
+    pid = mem[M_PROCESS_LIST]+1
     # Validate process limit and check for gaps
     mem[M_PROCESS_LIST] += 1
-    process_base = mem[M_PROCESSES+pid]
+    process_base = M_PROCESSES+(pid-1)*32
     mem[process_base + PCB_PID] = pid
-    mem[PCB_PC] = process_base + PC_BASE
+    mem[process_base + PCB_PC] = process_base + PC_BASE
     # Load asm into binary, then into asm
+    print(pid, process_base)
 
 def save_process(reg, mem, pid):
     process_base = mem[M_PROCESS_LIST+pid]
@@ -80,4 +81,8 @@ def hexdump(src):
     for i in range(0, len(src), 8):
         print(f"{i}-{i+7}:", " ".join(hex(src[i])[2:].zfill(4) for i in range(i, i+8)))
 
-hexdump([i for i in range(0, 32)])
+start_process(registers, memory, 0)
+start_process(registers, memory, 0)
+start_process(registers, memory, 0)
+start_process(registers, memory, 0)
+hexdump(memory)
