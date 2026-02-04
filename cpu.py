@@ -10,32 +10,32 @@
 # Control
 # 00 nop
 # 01 halt
-# 02 jump, addr
-# 03 jump if zero, addr, reg
-# 04 jump it not zero, addr, reg
+# 02 jump:     addr
+# 03 jump =0:  addr, reg
+# 04 jump !=0: addr, reg
 #
 # registers and memory
-# 10 write reg, reg_out, reg_in
-# 11 write reg immediate, reg_out, immediate
-# 12 read mem, mem, reg
-# 13 write mem, mem, reg
-# 14 write mem immediate, mem, immediate
+# 10 write reg:   reg1 = reg2
+# 11 write reg i: reg = immediate
+# 12 read mem:    reg = mem
+# 13 write mem:   mem = reg
+# 14 write mem i: mem = immediate
 #
-# ALU
-# 30 add, reg1, reg2
-# 31 add immediate, reg1, reg2
-# 32 mul, reg1, reg2
-# 33 mul immediate, reg1, reg2
-# 34 and, reg1, reg2
-# 35 or, reg1, reg2
-# 36 not, reg1
-# 37 xor, reg1, reg2
-# 38 shift left, reg1, reg2
-# 39 shift left immediate, reg1, reg2
-# 3a shift right, reg1, reg2
-# 3b shift right immediate, reg1, reg2
-# 3c div, reg1, reg2
-# 3d mod, reg1, reg2
+# ALU, all results are stored in ALU
+# 30 add:   reg1 + reg2
+# 31 add i: reg1 + immediate
+# 32 mul:   reg1 * reg2
+# 33 mul i: reg1 * immediate
+# 34 and: reg1 & reg2
+# 35 or:  reg1 | reg2
+# 36 not: !reg
+# 37 xor: reg1 ^ reg2
+# 38 shift left:    reg1 << reg2
+# 39 shift left i:  reg << immediate
+# 3a shift right:   reg1 >> reg2
+# 3b shift right i: reg >> immediate
+# 3c div: reg1 / reg2
+# 3d mod: reg1 % reg2
 
 # CPU registers
 C_PC = 0
