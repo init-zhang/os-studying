@@ -111,7 +111,7 @@ def cpu_cycle(reg, mem):
     load_process(reg, mem)
 
 def padded_hex(n):
-    return hex(n)[2:].zfill(4) if n != 0xFFFF else "----"
+    return hex(n)[2:].zfill(6) if n != 0xFFFF else "------"
 
 def hexdump(src):
     for i in range(0, len(src), 8):
