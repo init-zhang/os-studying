@@ -2,6 +2,8 @@
 # 00000000 00000000 00000000
 # opcode   r1       r2/immediate
 #
+# Valid registers: $alu, $r0, $r1, $r2
+#
 # Categories
 # 0X control
 # 1X registers and memory
@@ -9,33 +11,33 @@
 #
 # Control
 # 00 nop
-# 01 halt
-# 02 jump:     addr
-# 03 jump =0:  addr, reg
-# 04 jump !=0: addr, reg
+# 01 die
+# 02 j:   addr
+# 03 je:  addr, reg = 0?
+# 04 jne: addr, reg != 0?
 #
 # registers and memory
-# 10 write reg:   reg1 = reg2
-# 11 write reg i: reg = immediate
-# 12 read mem:    reg = mem
-# 13 write mem:   mem = reg
-# 14 write mem i: mem = immediate
+# 10 wg:  reg1 = reg2
+# 11 wgi: reg = immediate
+# 12 rm:  reg = mem
+# 13 wm:  mem = reg
+# 14 wmi: mem = immediate
 #
 # ALU, all results are stored in ALU
-# 30 add:   reg1 + reg2
-# 31 add i: reg1 + immediate
-# 32 mul:   reg1 * reg2
-# 33 mul i: reg1 * immediate
-# 34 and: reg1 & reg2
-# 35 or:  reg1 | reg2
-# 36 not: !reg
-# 37 xor: reg1 ^ reg2
-# 38 shift left:    reg1 << reg2
-# 39 shift left i:  reg << immediate
-# 3a shift right:   reg1 >> reg2
-# 3b shift right i: reg >> immediate
-# 3c div: reg1 / reg2
-# 3d mod: reg1 % reg2
+# 30 add:  reg1 + reg2
+# 31 addi: reg1 + immediate
+# 32 mul:  reg1 * reg2
+# 33 muli: reg1 * immediate
+# 34 and:  reg1 & reg2
+# 35 or:   reg1 | reg2
+# 36 not:  !reg
+# 37 xor:  reg1 ^ reg2
+# 38 sl:   reg1 << reg2
+# 39 sli:  reg << immediate
+# 3a sr:   reg1 >> reg2
+# 3b sri:  reg >> immediate
+# 3c div:  reg1 / reg2
+# 3d mod:  reg1 % reg2
 
 # CPU registers
 C_PC = 0
