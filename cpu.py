@@ -64,17 +64,87 @@ def decode(reg, mem):
     operand1 = (instruct & 0xFF00) >> 8
     operand2 = instruct & 0xFF
 
+    print(opcode, operand1, operand2)
+
     # Begin the if chain
-    if opcode == 0x00:
+    if opcode == 0x00:  # nop
         pass
-    elif opcode == 0x01:
+    elif opcode == 0x01:  # die
         pass
-    elif opcode == 0x02:
+    elif opcode == 0x02:  # j adrr
         # Get virtual memory offset
         reg[C_PC] = operand1
-    elif opcode == 0x03:
+    elif opcode == 0x03:  # je addr, reg
         if reg[operand2] == 0:
             reg[C_PC] = operand1
-    elif opcode == 0x04:
+    elif opcode == 0x04:  # jne addr, reg
         if reg[operand2] != 0:
             reg[C_PC] = operand1
+
+    # Registers and memory
+    elif opcode == 0x10:  # wg reg1 = reg2
+        reg[operand1] = reg[operand2]
+
+    elif opcode == 0x11:  # wgi reg = immediate
+        reg[operand1] = operand2
+
+    elif opcode == 0x12:  # rm reg = mem
+        reg[C_MAR] = reg[operand2]
+        read_memory()
+        reg[operand1] = reg[C_MDR]
+
+    elif opcode == 0x13:  # wm mem = reg
+        reg[C_MAR] = reg[operand1]
+        reg[C_MDR] = reg[operand2]
+        write_memory()
+
+    elif opcode == 0x14:  # wmi mem = immediate
+        reg[C_MAR] = reg[operand1]
+        reg[C_MDR] = operand2
+        write_memory()
+
+    # ALU operations (results go to ALU register)
+    elif opcode == 0x30:  # add
+        reg[C_ACC] = reg[operand1] + reg[operand2]
+
+    elif opcode == 0x31:  # addi
+        reg[C_ACC] = reg[operand1] + operand2
+
+    elif opcode == 0x32:  # mul
+        reg[C_ACC] = reg[operand1] * reg[operand2]
+
+    elif opcode == 0x33:  # muli
+        reg[C_ACC] = reg[operand1] * operand2
+
+    elif opcode == 0x34:  # and
+        reg[C_ACC] = reg[operand1] & reg[operand2]
+
+    elif opcode == 0x35:  # or
+        reg[C_ACC] = reg[operand1] | reg[operand2]
+
+    elif opcode == 0x36:  # not
+        reg[C_ACC] = ~reg[operand1]
+
+    elif opcode == 0x37:  # xor
+        reg[C_ACC] = reg[operand1] ^ reg[operand2]
+
+    elif opcode == 0x38:  # sl
+        reg[C_ACC] = reg[operand1] << reg[operand2]
+
+    elif opcode == 0x39:  # sli
+        reg[C_ACC] = reg[operand1] << operand2
+
+    elif opcode == 0x3A:  # sr
+        reg[C_ACC] = reg[operand1] >> reg[operand2]
+
+    elif opcode == 0x3B:  # sri
+        reg[C_ACC] = reg[operand1] >> operand2
+
+    elif opcode == 0x3C:  # div
+        reg[C_ACC] = reg[operand1] // reg[operand2] if reg[operand2] != 0 else 0
+
+    elif opcode == 0x3D:  # mod
+        reg[C_ACC] = reg[operand1] % reg[operand2] if reg[operand2] != 0 else 0
+
+    else:
+        raise ValueError(f"Unknown opcode: {opcode:02X}")
