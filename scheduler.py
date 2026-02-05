@@ -1,3 +1,5 @@
+import cpu
+
 # Memory
 # 0-31 OS and scheduler
 # 15 Current PID
@@ -97,10 +99,10 @@ def dequeue(reg, mem):
 
 # No local variables for the fun and realism
 def cpu_cycle(reg, mem):
-    reg[C_IR] = reg[C_PC]
+    reg[C_IR] = mem[reg[C_PC]]
     reg[C_PC] += 1
 
-    # decode_execute(reg, mem, reg[C_IR])
+    cpu.decode(reg, mem)
 
     # Scheduler calls
     # Check queue
@@ -129,7 +131,17 @@ dequeue(registers, memory)
 load_process(registers, memory)
 hexdump(memory)
 hexdump(registers)
-while input("> ") == "y":
-    cpu_cycle(registers, memory)
-    hexdump(memory)
-    hexdump(registers)
+
+while 1:
+    user = input("> ")
+
+    if user == "n":
+        print(f"{memory[M_CURRENT_PID] = }")
+        cpu_cycle(registers, memory)
+
+    elif user == "hex":
+        hexdump(memory)
+        hexdump(registers)
+
+    elif user == "q":
+        break
