@@ -2,7 +2,7 @@
 # 00000000 00000000 00000000
 # opcode   r1       r2/immediate
 #
-# Valid registers: $alu, $r0, $r1, $r2
+# Valid registers: $ac, $r0, $r1, $r2
 #
 # Categories
 # 0X control

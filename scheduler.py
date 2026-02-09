@@ -143,5 +143,11 @@ while 1:
         hexdump(memory)
         hexdump(registers)
 
+    elif user == "rex":
+        hexdump(registers)
+
+    elif user == "mex":
+        hexdump(memory)
+
     elif user == "q":
         break
