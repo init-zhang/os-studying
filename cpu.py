@@ -48,7 +48,9 @@ C_ACC = 4
 C_R0 = 5
 C_R1 = 6
 C_R2 = 7
-registers = [0] * 8
+
+def init_cpu():
+    return [0] * 8
 
 def read_memory():
     # Implement virtual memory checks

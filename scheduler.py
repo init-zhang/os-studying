@@ -1,38 +1,5 @@
-import cpu
-
-# Memory
-# 0-31 OS and scheduler
-# 15 Current PID
-# 16 Queue tail
-# 17 Queue head
-# 18-23 Process queue
-# 24 Next free PID
-# 25-31 Process list
-# 32-1023 Processes
-M_CURRENT_PID = 15
-M_QUEUE_TAIL = 16
-M_QUEUE_HEAD = 17
-M_QUEUE_BASE = 18
-M_QUEUE_END = 23
-M_PROCESS_LIST = 24
-M_PROCESSES = 32
-def init_memory():
-    memory = [0xFFFF] * 256
-    memory[M_PROCESS_LIST] = 0
-    memory[M_QUEUE_TAIL] = M_QUEUE_BASE
-    memory[M_QUEUE_HEAD] = M_QUEUE_BASE
-    return memory
-
-# CPU registers
-C_PC = 0
-C_IR = 1
-C_MAR = 2
-C_MDR = 3
-C_ACC = 4
-C_R0 = 5
-C_R1 = 6
-C_R2 = 7
-registers = [0] * 8
+from cpu import *
+from memory import *
 
 # Processes
 P_SIZE = 32
@@ -102,7 +69,7 @@ def cpu_cycle(reg, mem):
     reg[C_IR] = mem[reg[C_PC]]
     reg[C_PC] += 1
 
-    cpu.decode(reg, mem)
+    decode(reg, mem)
 
     # Scheduler calls
     # Check queue
@@ -122,6 +89,7 @@ def hexdump(src):
     print("\033[0m", end="")
 
 memory = init_memory()
+registers = init_cpu()
 
 start_process(registers, memory, range(4))
 start_process(registers, memory, range(8))
