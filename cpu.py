@@ -52,10 +52,14 @@ registers = [0] * 8
 
 def read_memory():
     # Implement virtual memory checks
+    if reg[C_MAR] < 0 or reg[C_MAR] > 7:
+        raise Exception("Out of bounds")
     reg[C_MDR] = mem[reg[C_MAR]]
 
 def write_memory():
     # Implement virtual memory checks
+    if reg[C_MAR] < 0 or reg[C_MAR] > 7:
+        raise Exception("Out of bounds")
     mem[reg[C_MAR]] = reg[C_MDR]
 
 def decode(reg, mem):
