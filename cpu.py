@@ -1,3 +1,5 @@
+from constants import *
+
 # Instruction set
 # 00000000 00000000 00000000
 # opcode   r1       r2/immediate
@@ -39,16 +41,6 @@
 # 3c div:  reg1 / reg2
 # 3d mod:  reg1 % reg2
 
-# CPU registers
-C_PC = 0
-C_IR = 1
-C_MAR = 2
-C_MDR = 3
-C_ACC = 4
-C_R0 = 5
-C_R1 = 6
-C_R2 = 7
-
 def init_cpu():
     return [0] * 8
 
@@ -56,13 +48,21 @@ def read_memory():
     # Implement virtual memory checks
     if reg[C_MAR] < 0 or reg[C_MAR] > 7:
         raise Exception("Out of bounds")
-    reg[C_MDR] = mem[reg[C_MAR]]
+    mem[reg[C_MDR]] = reg[
+        mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
+        + PD_BASE
+        + C_MDR
+    ]
 
 def write_memory():
     # Implement virtual memory checks
     if reg[C_MAR] < 0 or reg[C_MAR] > 7:
         raise Exception("Out of bounds")
-    mem[reg[C_MAR]] = reg[C_MDR]
+    reg[
+        mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
+        + PD_BASE
+        + C_MDR
+    ] = mem[reg[C_MDR]]
 
 def decode(reg, mem):
     instruct = reg[C_IR]
