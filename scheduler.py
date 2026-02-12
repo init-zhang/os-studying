@@ -78,6 +78,8 @@ registers = init_cpu()
 
 start_process(registers, memory, [0x110510, 0x110620, 0x110730])
 start_process(registers, memory, [0x140010, 0x140120, 0x140230])
+start_process(registers, memory, [0x110501, 0x110602, 0x300506, 0x130004])
+start_process(registers, memory, [0x110502, 0x310502, 0x130004])
 dequeue(registers, memory)
 load_process(registers, memory)
 hexdump(memory)
