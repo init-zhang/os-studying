@@ -44,25 +44,25 @@ from constants import *
 def init_cpu():
     return [0] * 8
 
-def read_memory():
+def read_memory(reg, mem):
     # Implement virtual memory checks
     if reg[C_MAR] < 0 or reg[C_MAR] > 7:
         raise Exception("Out of bounds")
-    mem[reg[C_MDR]] = reg[
+    reg[C_MDR] = mem[
         mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
         + PD_BASE
-        + C_MDR
+        + reg[C_MAR]
     ]
 
-def write_memory():
+def write_memory(reg, mem):
     # Implement virtual memory checks
     if reg[C_MAR] < 0 or reg[C_MAR] > 7:
         raise Exception("Out of bounds")
-    reg[
+    mem[
         mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
         + PD_BASE
-        + C_MDR
-    ] = mem[reg[C_MDR]]
+        + reg[C_MAR]
+    ] = reg[C_MDR]
 
 def decode(reg, mem):
     instruct = reg[C_IR]
@@ -70,7 +70,7 @@ def decode(reg, mem):
     operand1 = (instruct & 0xFF00) >> 8
     operand2 = instruct & 0xFF
 
-    print(opcode, operand1, operand2)
+    print(f"{opcode = }, {operand1 = }, {operand2 = }")
 
     # Begin the if chain
     if opcode == 0x00:  # nop
@@ -95,19 +95,19 @@ def decode(reg, mem):
         reg[operand1] = operand2
 
     elif opcode == 0x12:  # rm reg = mem
-        reg[C_MAR] = reg[operand2]
-        read_memory()
+        reg[C_MAR] = operand2
+        read_memory(reg, mem)
         reg[operand1] = reg[C_MDR]
 
     elif opcode == 0x13:  # wm mem = reg
-        reg[C_MAR] = reg[operand1]
+        reg[C_MAR] = operand1
         reg[C_MDR] = reg[operand2]
-        write_memory()
+        write_memory(reg, mem)
 
     elif opcode == 0x14:  # wmi mem = immediate
-        reg[C_MAR] = reg[operand1]
+        reg[C_MAR] = operand1
         reg[C_MDR] = operand2
-        write_memory()
+        write_memory(reg, mem)
 
     # ALU operations (results go to ALU register)
     elif opcode == 0x30:  # add
