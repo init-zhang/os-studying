@@ -1,21 +1,6 @@
 from cpu import *
 from memory import *
-
-# Processes
-P_SIZE = 32
-# 0-7 Process control block
-PCB_PID = 0
-PCB_PC = 1
-PCB_ACC = 2
-PCB_R0 = 3
-PCB_R1 = 4
-PCB_R2 = 5
-# 8-15 words of data
-PD_BASE = 8
-PD_LENGTH = 8
-# 16-31 words of code
-PC_BASE = 16
-PC_LENGTH = 16
+from constants import *
 
 def start_process(reg, mem, asm):
     pid = mem[M_PROCESS_LIST]+1
@@ -91,10 +76,8 @@ def hexdump(src):
 memory = init_memory()
 registers = init_cpu()
 
-start_process(registers, memory, range(4))
-start_process(registers, memory, range(8))
-start_process(registers, memory, range(12))
-start_process(registers, memory, range(16))
+start_process(registers, memory, [0x110510, 0x110620, 0x110730])
+start_process(registers, memory, [0x140010, 0x140120, 0x140230])
 dequeue(registers, memory)
 load_process(registers, memory)
 hexdump(memory)
