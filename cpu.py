@@ -19,8 +19,8 @@ from constants import *
 # 04 jne: addr, reg != 0?
 #
 # registers and memory
-# 10 wg:  reg1 = reg2
-# 11 wgi: reg = immediate
+# 10 wr:  reg1 = reg2
+# 11 wri: reg = immediate
 # 12 rm:  reg = mem
 # 13 wm:  mem = reg
 # 14 wmi: mem = immediate
@@ -88,10 +88,10 @@ def decode(reg, mem):
             reg[C_PC] = operand1
 
     # Registers and memory
-    elif opcode == 0x10:  # wg reg1 = reg2
+    elif opcode == 0x10:  # wr reg1 = reg2
         reg[operand1] = reg[operand2]
 
-    elif opcode == 0x11:  # wgi reg = immediate
+    elif opcode == 0x11:  # wri reg = immediate
         reg[operand1] = operand2
 
     elif opcode == 0x12:  # rm reg = mem
