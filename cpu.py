@@ -26,20 +26,29 @@ from constants import *
 # 14 wmi: mem = immediate
 #
 # ALU, all results are stored in ALU
-# 30 add:  reg1 + reg2
-# 31 addi: reg1 + immediate
-# 32 mul:  reg1 * reg2
-# 33 muli: reg1 * immediate
-# 34 and:  reg1 & reg2
-# 35 or:   reg1 | reg2
-# 36 not:  !reg
-# 37 xor:  reg1 ^ reg2
-# 38 sl:   reg1 << reg2
-# 39 sli:  reg << immediate
-# 3a sr:   reg1 >> reg2
-# 3b sri:  reg >> immediate
-# 3c div:  reg1 / reg2
-# 3d mod:  reg1 % reg2
+# 30 add: reg1 + reg2
+# 31 sub: reg1 - reg2
+# 32 mul: reg1 * reg2
+# 33 and: reg1 & reg2
+# 34 or:  reg1 | reg2
+# 35 xor: reg1 ^ reg2
+# 36 sl:  reg1 << reg2
+# 37 sr:  reg1 >> reg2
+# 38 div: reg1 / reg2
+# 39 mod: reg1 % reg2
+# 3a not: !reg
+# 
+# Immediate ALU, all results are stored in ALU
+# 40 addi: reg1 + immediate
+# 41 subi: reg1 - immediate
+# 42 muli: reg1 * immediate
+# 43 andi: reg1 & immediate
+# 44 ori:  reg1 | immediate
+# 45 xori: reg1 ^ immediate
+# 46 sli:  reg1 << immediate
+# 47 sri:  reg1 >> immediate
+# 48 divi: reg1 / immediate
+# 49 modi: reg1 % immediate
 
 def init_cpu():
     return [0] * 8
