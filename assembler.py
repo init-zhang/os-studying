@@ -6,7 +6,8 @@ REGS = {
 }
 
 OPCODES = {
-    # Control "nop":  0x00,
+    # Control
+    "nop":  0x00,
     "die":  0x01,
     "j":    0x02,
     "je":   0x03,
@@ -85,14 +86,15 @@ def assemble(program_text):
             instructions.append(inst)
     return instructions
 
-# Example usage
 if __name__ == "__main__":
-    program = """
-# Add immediate to $r1
-wri $r1, 5  # Write 5 to r1
-addi $r1, 2  # Add 2 to r1, stored in acc
-wr $r1, $ac  # Write acc result to r1
-    """
+    from sys import argv
+
+    if len(argv) < 2:
+        raise Exception("No file provided")
+
+    with open(argv[1], "r") as f:
+        program = f.read()
+
     assembled = assemble(program)
     for i, word in enumerate(assembled):
-        print(f"{i:02d}: {word:06X}")
+        print(f"0x{word:06X},")
