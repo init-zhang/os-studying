@@ -14,9 +14,9 @@ from constants import *
 # Control
 # 00 nop
 # 01 die
-# 02 j:   addr
-# 03 je:  addr, reg = 0?
-# 04 jne: addr, reg != 0?
+# 02 j:   reg1
+# 03 je:  reg1, reg2 = 0?
+# 04 jne: reg1, reg2 != 0?
 #
 # registers and memory
 # 10 wr:  reg1 = reg2
@@ -79,7 +79,7 @@ def decode(reg, mem):
     operand1 = (instruct & 0xFF00) >> 8
     operand2 = instruct & 0xFF
 
-    print(f"{opcode = }, {operand1 = }, {operand2 = }")
+    print(f"{opcode = :X}, {operand1 = :X}, {operand2 = :X}")
 
     # Begin the if chain
     if opcode == 0x00:  # nop
@@ -88,13 +88,25 @@ def decode(reg, mem):
         pass
     elif opcode == 0x02:  # j adrr
         # Get virtual memory offset
-        reg[C_PC] = operand1
+        reg[C_PC] = (
+            mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
+            + PC_BASE
+            + int(str(operand1), 16)
+        )
     elif opcode == 0x03:  # je addr, reg
         if reg[operand2] == 0:
-            reg[C_PC] = operand1
+            reg[C_PC] = mem[
+                mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
+                + PC_BASE
+                + int(str(operand1), 16)
+            ]
     elif opcode == 0x04:  # jne addr, reg
         if reg[operand2] != 0:
-            reg[C_PC] = operand1
+            reg[C_PC] = mem[
+                mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
+                + PC_BASE
+                + int(str(operand1), 16)
+            ]
 
     # Registers and memory
     elif opcode == 0x10:  # wr reg1 = reg2
@@ -109,12 +121,12 @@ def decode(reg, mem):
         reg[operand1] = reg[C_MDR]
 
     elif opcode == 0x13:  # wm mem = reg
-        reg[C_MAR] = operand1
+        reg[C_MAR] = reg[operand1]
         reg[C_MDR] = reg[operand2]
         write_memory(reg, mem)
 
     elif opcode == 0x14:  # wmi mem = immediate
-        reg[C_MAR] = operand1
+        reg[C_MAR] = reg[operand1]
         reg[C_MDR] = operand2
         write_memory(reg, mem)
 
