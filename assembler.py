@@ -90,7 +90,7 @@ if __name__ == "__main__":
     program = """
 # Add immediate to $r1
 wri $r1, 5  # Write 5 to r1
-addi $r1, 2  # Add 5 to r1, stored in acc
+addi $r1, 2  # Add 2 to r1, stored in acc
 wr $r1, $ac  # Write acc result to r1
     """
     assembled = assemble(program)

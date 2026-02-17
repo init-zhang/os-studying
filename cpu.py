@@ -37,7 +37,7 @@ from constants import *
 # 38 div: reg1 / reg2
 # 39 mod: reg1 % reg2
 # 3a not: !reg
-# 
+#
 # Immediate ALU, all results are stored in ALU
 # 40 addi: reg1 + immediate
 # 41 subi: reg1 - immediate
@@ -148,7 +148,7 @@ def decode(reg, mem):
 
     elif opcode == 0x39:  # mod
         reg[C_ACC] = reg[operand1] % reg[operand2] if reg[operand2] != 0 else 0
-    
+
     elif opcode == 0x3a:  # not
         reg[C_ACC] = ~reg[operand1]
 
@@ -182,6 +182,6 @@ def decode(reg, mem):
 
     elif opcode == 0x49:  # modi
         reg[C_ACC] = reg[operand1] % operand2 if operand2 != 0 else 0
-    
+ 
     else:
         raise ValueError(f"Unknown opcode: {opcode:02X}")
