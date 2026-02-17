@@ -95,18 +95,18 @@ def decode(reg, mem):
         )
     elif opcode == 0x03:  # je addr, reg
         if reg[operand2] == 0:
-            reg[C_PC] = mem[
+            reg[C_PC] = (
                 mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
                 + PC_BASE
                 + int(str(operand1), 16)
-            ]
+            )
     elif opcode == 0x04:  # jne addr, reg
         if reg[operand2] != 0:
-            reg[C_PC] = mem[
+            reg[C_PC] = (
                 mem[M_PROCESS_LIST + mem[M_CURRENT_PID]]
                 + PC_BASE
                 + int(str(operand1), 16)
-            ]
+            )
 
     # Registers and memory
     elif opcode == 0x10:  # wr reg1 = reg2
