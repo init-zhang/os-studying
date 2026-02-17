@@ -36,7 +36,8 @@ from constants import *
 # 37 sr:  reg1 >> reg2
 # 38 div: reg1 / reg2
 # 39 mod: reg1 % reg2
-# 3a not: !reg
+# 3a g: reg1 > reg2
+# 3b not: !reg
 #
 # Immediate ALU, all results are stored in ALU
 # 40 addi: reg1 + immediate
@@ -49,6 +50,7 @@ from constants import *
 # 47 sri:  reg1 >> immediate
 # 48 divi: reg1 / immediate
 # 49 modi: reg1 % immediate
+# 4a gi: reg1 > immediate
 
 def init_cpu():
     return [0] * 8
@@ -161,7 +163,10 @@ def decode(reg, mem):
     elif opcode == 0x39:  # mod
         reg[C_ACC] = reg[operand1] % reg[operand2] if reg[operand2] != 0 else 0
 
-    elif opcode == 0x3a:  # not
+    elif opcode == 0x3a:  # g
+        reg[C_ACC] = int(reg[operand1] > reg[operand2])
+
+    elif opcode == 0x3b:  # not
         reg[C_ACC] = ~reg[operand1]
 
     # Immediate ALU operations (results go to ALU register)
@@ -194,6 +199,9 @@ def decode(reg, mem):
 
     elif opcode == 0x49:  # modi
         reg[C_ACC] = reg[operand1] % operand2 if operand2 != 0 else 0
- 
+
+    elif opcode == 0x4a:  # gi
+        reg[C_ACC] = int(reg[operand1] > operand2)
+
     else:
         raise ValueError(f"Unknown opcode: {opcode:02X}")
