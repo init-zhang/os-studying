@@ -54,8 +54,8 @@ def parse_operand(x):
     return int(x)
 
 def assemble_line(line):
-    line = line.strip()
-    if not line:
+    line = line.split("#")[0].strip()
+    if not line or line.startswith("#"):
         return None
 
     parts = line.replace(",", " ").split()
@@ -88,9 +88,10 @@ def assemble(program_text):
 # Example usage
 if __name__ == "__main__":
     program = """
-    wri $r1, 5
-    addi $r1, 2
-    wr $ac, $r1
+# Add immediate to $r1
+wri $r1, 5  # Write 5 to r1
+addi $r1, 2  # Add 5 to r1, stored in acc
+wr $r1, $ac  # Write acc result to r1
     """
     assembled = assemble(program)
     for i, word in enumerate(assembled):
