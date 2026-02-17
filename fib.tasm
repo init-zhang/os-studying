@@ -1,0 +1,15 @@
+wri $r2 1  # i
+wri $r0 1  # n-2
+wri $r1 1  # n-1
+wm $r2 $r0
+subi $r2 8
+je 14 $ac
+nop
+add $r0 $r1
+wr $r0 $r1
+wr $r1 $ac
+addi $r2 1
+wr $r2 $ac
+j 3
+nop
+die
