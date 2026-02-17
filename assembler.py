@@ -31,7 +31,8 @@ OPCODES = {
     "sr":   0x37,
     "div":  0x38,
     "mod":  0x39,
-    "not":  0x3A,
+    "g":    0x3A,
+    "not":  0x3B,
 
     # Immediate ALU
     "addi": 0x40,
@@ -44,6 +45,7 @@ OPCODES = {
     "sri":  0x47,
     "divi": 0x48,
     "modi": 0x49,
+    "gi":   0x4A,
 }
 
 def parse_operand(x):
