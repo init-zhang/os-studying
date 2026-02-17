@@ -1,8 +1,7 @@
 from cpu import *
 from memory import *
 from constants import *
-
-def start_process(reg, mem, asm):
+def start_process(reg, mem, binary):
     pid = mem[M_PROCESS_LIST]+1
     # Validate process limit and check for gaps
     mem[M_PROCESS_LIST] += 1
@@ -10,16 +9,10 @@ def start_process(reg, mem, asm):
     mem[M_PROCESS_LIST+pid] = process_base
     mem[process_base + PCB_PID] = pid
     mem[process_base + PCB_PC] = process_base + PC_BASE
-    # Load asm into binary, then into asm
-    for i, instruction in enumerate(assemble(asm)):
+    for i, instruction in enumerate(binary):
         mem[process_base + PC_BASE + i] = instruction
     mem[M_CURRENT_PID] = pid
     enqueue(reg, mem)
-
-# Placeholder
-def assemble(asm):
-    for line in asm:
-        yield line
 
 def save_process(reg, mem):
     process_base = mem[M_PROCESS_LIST+mem[M_CURRENT_PID]]
@@ -76,11 +69,14 @@ def hexdump(src):
 memory = init_memory()
 registers = init_cpu()
 
-start_process(registers, memory, [0x110510, 0x110620, 0x110730])
-start_process(registers, memory, [0x140010, 0x140120, 0x140230])
-start_process(registers, memory, [0x110501, 0x110602, 0x300506, 0x130004])
-start_process(registers, memory, [0x110502, 0x310502, 0x130004])
-start_process(registers, memory, [0x110605, 0x400602, 0x100604])
+from assembler import *
+
+with open("fib.tasm", "r") as f:
+    program = f.read()
+
+assembled = assemble(program)
+
+start_process(registers, memory, assembled)
 dequeue(registers, memory)
 load_process(registers, memory)
 hexdump(memory)
