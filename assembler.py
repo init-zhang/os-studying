@@ -6,32 +6,43 @@ REGS = {
 }
 
 OPCODES = {
-    "nop":  0x00,
+    # Control "nop":  0x00,
     "die":  0x01,
     "j":    0x02,
     "je":   0x03,
     "jne":  0x04,
 
+    # Registers and memory
     "wr":   0x10,
     "wri":  0x11,
     "rm":   0x12,
     "wm":   0x13,
     "wmi":  0x14,
 
+    # ALU (register–register)
     "add":  0x30,
-    "addi": 0x31,
+    "sub":  0x31,
     "mul":  0x32,
-    "muli": 0x33,
-    "and":  0x34,
-    "or":   0x35,
-    "not":  0x36,
-    "xor":  0x37,
-    "sl":   0x38,
-    "sli":  0x39,
-    "sr":   0x3A,
-    "sri":  0x3B,
-    "div":  0x3C,
-    "mod":  0x3D,
+    "and":  0x33,
+    "or":   0x34,
+    "xor":  0x35,
+    "sl":   0x36,
+    "sr":   0x37,
+    "div":  0x38,
+    "mod":  0x39,
+    "not":  0x3A,
+
+    # Immediate ALU
+    "addi": 0x40,
+    "subi": 0x41,
+    "muli": 0x42,
+    "andi": 0x43,
+    "ori":  0x44,
+    "xori": 0x45,
+    "sli":  0x46,
+    "sri":  0x47,
+    "divi": 0x48,
+    "modi": 0x49,
 }
 
 def parse_operand(x):
@@ -73,7 +84,6 @@ def assemble(program_text):
         if (inst := assemble_line(line)) is not None:
             instructions.append(inst)
     return instructions
-
 
 # Example usage
 if __name__ == "__main__":
