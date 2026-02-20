@@ -69,18 +69,11 @@ def hexdump(src):
 memory = init_memory()
 registers = init_cpu()
 
-from assembler import *
+from disk import *
 
-with open("fib.tasm", "r") as f:
-    program = f.read()
+load_file_entries(registers, memory, "disk1")
 
-assembled = assemble(program)
-
-start_process(registers, memory, assembled)
-dequeue(registers, memory)
-load_process(registers, memory)
 hexdump(memory)
-hexdump(registers)
 
 while 1:
     user = input("> ")
