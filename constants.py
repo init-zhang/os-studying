@@ -62,3 +62,12 @@ PC_LENGTH = 16
 # +--+----+----+----+----+----+----+----+----+
 # |24|Inst|Inst|Inst|Inst|Inst|Inst|Inst|Inst|
 # +--+----+----+----+----+----+----+----+----+
+
+# Disk
+F_DIRECTORY_BASE = 128
+F_DIRECTORY_ENTRY_SIZE = 4
+F_DIRECTORY_SIZE = F_DIRECTORY_ENTRY_SIZE * 6
+# Hex entry structure
+# +---------+---------+-----+------+
+# |file name|file name|start|length|
+# +---------+---------+-----+------+
