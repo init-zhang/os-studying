@@ -1,6 +1,8 @@
 from cpu import *
 from memory import *
 from constants import *
+
+
 def start_process(reg, mem, binary):
     pid = mem[M_PROCESS_LIST]+1
     # Validate process limit and check for gaps

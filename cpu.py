@@ -1,5 +1,6 @@
 from constants import *
 
+
 # Instruction set
 # 00000000 00000000 00000000
 # opcode   r1       r2/immediate
